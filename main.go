@@ -9,17 +9,25 @@ import (
 func main() {
 	fmt.Println("подключение субд")
 
-	db, err := sql.Open("mysql", "root:root@/mydbtest")
+	db, err := sql.Open("mysql", "root:croftsky1@/mydbtest")
 	if err != nil {
 		panic(err)
 	}
 
 	defer func(db *sql.DB) {
-		err := db.Close()
-		if err != nil {
-
-		}
+		_ = db.Close()
 	}(db)
+
+	insert, err := db.Query("INSERT INTO users (name, age, email) VALUES('golang', 12, 'go@list.com')")
+	if err != nil {
+		panic(err)
+	}
+	defer func(insert *sql.Rows) {
+		err := insert.Close()
+		if err != nil {
+			panic(err)
+		}
+	}(insert)
 
 	fmt.Println("Connected")
 }
