@@ -2,14 +2,58 @@ package main
 
 import (
 	"awesomeProject/database"
+	"awesomeProject/model"
+	"encoding/json"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/gorilla/mux"
+	"io"
+	"log"
+	"net/http"
+	"strconv"
 )
 
-//type User struct {
-//	Name  string `json:"name"`
-//	Age   uint16 `json:"age"`
-//	Email string `json:"email"`
-//}
+func createPerson(w http.ResponseWriter, r *http.Request) {
+	requestBody, _ := io.ReadAll(r.Body)
+	var person model.Person
+	json.Unmarshal(requestBody, &person)
+
+	database.Connector.Create(person)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(person)
+}
+
+func getPersonByID(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	var person model.Person
+	database.Connector.First(&person, key)
+	w.Header().Set("Content-Type", "application/json")
+	json.NewEncoder(w).Encode(person)
+}
+
+func updatePersonByID(w http.ResponseWriter, r *http.Request) {
+	requestBody, _ := io.ReadAll(r.Body)
+	var person model.Person
+	json.Unmarshal(requestBody, &person)
+	database.Connector.Save(&person)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(person)
+}
+
+func deletePersonByID(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["id"]
+
+	var person model.Person
+	id, _ := strconv.ParseInt(key, 10, 64)
+	database.Connector.Where("id = ?", id).Delete(&person)
+	w.WriteHeader(http.StatusNoContent)
+}
 
 func main() {
 	config :=
@@ -25,42 +69,18 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	//fmt.Println("подключение субд")
-	//
-	//db, err := sql.Open("mysql", "root:croftsky1@/mydbtest")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//defer func(db *sql.DB) {
-	//	_ = db.Close()
-	//}(db)
-	//
-	//res, err := db.Query("SELECT name, age, email FROM users")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//for res.Next() {
-	//	var user User
-	//	err = res.Scan(&user.Name, &user.Age, &user.Email)
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//
-	//	fmt.Println(fmt.Sprintf("User: %s with age %d has email: %s", user.Name, user.Age, user.Email))
-	//}
+	fmt.Println("подключение субд")
 
-	//insert, err := db.Query("INSERT INTO users (name, age, email) VALUES('zerg', 12000, 'forthequeen@list.com')")
-	//if err != nil {
-	//	panic(err)
-	//}
-	//defer func(insert *sql.Rows) {
-	//	err := insert.Close()
-	//	if err != nil {
-	//		panic(err)
-	//	}
-	//}(insert)
+	log.Println("HTTP server starts on port 8090")
+	router := mux.NewRouter()
 
-	//fmt.Println("Connected")
+	router.HandleFunc("/create", createPerson).Methods("POST")
+
+	router.HandleFunc("/get/{id}", getPersonByID).Methods("GET")
+
+	router.HandleFunc("/update/{id}", updatePersonByID).Methods("PUT")
+
+	router.HandleFunc("/delete/{id}", deletePersonByID).Methods("DELETE")
+
+	log.Fatal(http.ListenAndServe(":8090", router))
 }
