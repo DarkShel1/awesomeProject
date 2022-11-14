@@ -4,7 +4,6 @@ import (
 	"awesomeProject/database"
 	"awesomeProject/model"
 	"encoding/json"
-	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/gorilla/mux"
 	"io"
@@ -61,7 +60,7 @@ func main() {
 			ServerName: "localhost:3306",
 			User:       "root",
 			Password:   "croftsky1",
-			DB:         "golang_api",
+			DB:         "mydbtest",
 		}
 
 	connectionString := database.GetConnectionString(config)
@@ -69,7 +68,6 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	fmt.Println("подключение субд")
 
 	log.Println("HTTP server starts on port 8090")
 	router := mux.NewRouter()
