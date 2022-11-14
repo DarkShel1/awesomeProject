@@ -15,7 +15,7 @@ import (
 
 func createPerson(w http.ResponseWriter, r *http.Request) {
 	requestBody, _ := io.ReadAll(r.Body)
-	var person model.Person
+	var person model.User
 	json.Unmarshal(requestBody, &person)
 
 	database.Connector.Create(person)
@@ -28,7 +28,7 @@ func getPersonByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 
-	var person model.Person
+	var person model.User
 	database.Connector.First(&person, key)
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(person)
@@ -36,7 +36,7 @@ func getPersonByID(w http.ResponseWriter, r *http.Request) {
 
 func updatePersonByID(w http.ResponseWriter, r *http.Request) {
 	requestBody, _ := io.ReadAll(r.Body)
-	var person model.Person
+	var person model.User
 	json.Unmarshal(requestBody, &person)
 	database.Connector.Save(&person)
 
@@ -49,7 +49,7 @@ func deletePersonByID(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	key := vars["id"]
 
-	var person model.Person
+	var person model.User
 	id, _ := strconv.ParseInt(key, 10, 64)
 	database.Connector.Where("id = ?", id).Delete(&person)
 	w.WriteHeader(http.StatusNoContent)
@@ -61,7 +61,7 @@ func main() {
 			ServerName: "localhost:3306",
 			User:       "root",
 			Password:   "croftsky1",
-			DB:         "mydbtest",
+			DB:         "golang_api",
 		}
 
 	connectionString := database.GetConnectionString(config)

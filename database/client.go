@@ -13,6 +13,6 @@ func Connect(connectionString string) error {
 	if err != nil {
 		return err
 	}
-	log.Println("Connnectin success!")
+	log.Println("Connnection success!")
 	return nil
 }
