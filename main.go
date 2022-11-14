@@ -15,12 +15,18 @@ import (
 func createPerson(w http.ResponseWriter, r *http.Request) {
 	requestBody, _ := io.ReadAll(r.Body)
 	var person model.User
-	json.Unmarshal(requestBody, &person)
+	err := json.Unmarshal(requestBody, &person)
+	if err != nil {
+		return
+	}
 
 	database.Connector.Create(person)
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(person)
+	er := json.NewEncoder(w).Encode(person)
+	if er != nil {
+		return
+	}
 }
 
 func getPersonByID(w http.ResponseWriter, r *http.Request) {
@@ -30,18 +36,27 @@ func getPersonByID(w http.ResponseWriter, r *http.Request) {
 	var person model.User
 	database.Connector.First(&person, key)
 	w.Header().Set("Content-Type", "application/json")
-	json.NewEncoder(w).Encode(person)
+	err := json.NewEncoder(w).Encode(person)
+	if err != nil {
+		return
+	}
 }
 
 func updatePersonByID(w http.ResponseWriter, r *http.Request) {
 	requestBody, _ := io.ReadAll(r.Body)
 	var person model.User
-	json.Unmarshal(requestBody, &person)
+	err := json.Unmarshal(requestBody, &person)
+	if err != nil {
+		return
+	}
 	database.Connector.Save(&person)
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(person)
+	er := json.NewEncoder(w).Encode(person)
+	if er != nil {
+		return
+	}
 }
 
 func deletePersonByID(w http.ResponseWriter, r *http.Request) {
