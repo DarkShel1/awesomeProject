@@ -10,19 +10,19 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("/")
-		api.GET("/")
-		api.GET("/:id")
-		api.PUT("/:id")
-		api.DELETE("/:id")
+		api.POST("/", h.createBalance)
+		api.GET("/", h.getAllBalances)
+		api.GET("/:id", h.getBalanceById)
+		api.PUT("/:id", h.updateBalance)
+		api.DELETE("/:id", h.deleteBalance)
 
 		reservations := api.Group("/reserve")
 		{
-			reservations.POST("/")
-			reservations.GET("/")
-			reservations.GET("/:user_id")
-			reservations.PUT("/:user_id")
-			reservations.DELETE("/:user_id")
+			reservations.POST("/", h.createReservation)
+			reservations.GET("/", h.getAllReservations)
+			reservations.GET("/:user_id", h.getReservationById)
+			reservations.PUT("/:user_id", h.updateReservation)
+			reservations.DELETE("/:user_id", h.deleteReservation)
 		}
 	}
 
