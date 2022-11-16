@@ -1,13 +1,13 @@
 package model
 
-type User struct {
-	ID    string `json:"id"`
-	Name  string `json:"name"`
-	Age   string `json:"age"`
-	Email string `json:"email"`
+type UserBalance struct {
+	Id      int  `json:"-"`
+	Balance uint `json:"balance"`
 }
 
-type Balance struct {
-	UserID  int32 `json:"user_id"`
-	Balance int32 `json:"balance"`
+type Reservation struct {
+	UserId  int  `json:"id"`
+	TaskId  int  `json:"task_id"`
+	OrderId int  `json:"order_id"`
+	Amount  uint `json:"balance"`
 }
