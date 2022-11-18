@@ -13,8 +13,8 @@ func main() {
 		database.Config{
 			ServerName: "localhost:3306",
 			User:       "root",
-			Password:   "croftsky1",
-			DB:         "golang_api",
+			Password:   "root",
+			DB:         "dbName",
 		}
 
 	connectionString := database.GetConnectionString(config)
