@@ -6,3 +6,19 @@
 
 для работы приложения нужно развернуть базу данных создать таблицы описанные в файле tables.sql, поменять конфиги базы данных в файле main.go и запустить
 
+описание работы методов в комментариях файла main.go
+
+создание сведений о балансе
+![image](https://user-images.githubusercontent.com/95168279/202803869-9fbc5e7f-75f5-420b-8df1-ec9a4fe0d1cd.png)
+
+получение сведений
+![image](https://user-images.githubusercontent.com/95168279/202803968-07386af4-638b-4e3f-98fe-bd2aeb40d5f4.png)
+
+изменение сведений
+![image](https://user-images.githubusercontent.com/95168279/202804098-9a2c738d-b56d-4ba9-8fa4-e59103d4ebc1.png)
+
+удаление
+![image](https://user-images.githubusercontent.com/95168279/202804284-45534b30-2485-4713-808c-c5ffea1fc7e5.png)
+
+операции с данными о резервируемой сумме выполняются аналогично с небольшими изменениями наименования эндпоинтов
+![image](https://user-images.githubusercontent.com/95168279/202804571-8161a7a1-06b3-4cd1-9822-a7d41b0f1b73.png)
